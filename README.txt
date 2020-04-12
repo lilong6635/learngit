@@ -1,0 +1,1 @@
+这个仓库模拟的是先在github上创建一个public仓库然后再把本地的仓库push到github的仓库上去
