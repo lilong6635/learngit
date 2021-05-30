@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <div>你好，这是关于Vue的学习</div>
+    <div id="app-1">
+      <input :disabled="isDisabled" type="text" v-model="inputText">
+      <div :class="{active: isAcitve}">{{message}}</div>
+      <div>模板上边的内容</div>
+      <temp-a></temp-a>
+      <div>模板下边的内容</div>
+    </div>
+  </div>
+  <div onclick="hello()">点击事件</div>
+  <div>
+    <div>看看能不能new 两个Vue</div>
+    <div id="app-2"></div>
+  </div>
+  
+  <script src="./vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+  <script>
+    
+    var obj = {
+      template: '<div onclick="hello()">{{message}}</div>',
+      data: function() {
+        return {
+          message: 'hello Vue!!!!!!!!!!!!!',
+        }
+      },
+      beforeCreate: function() {
+        console.log('child beforeCreat');
+      },
+      created: function() {
+        console.log('child created');
+        return new Promise(function(resolve, reject){
+          setTimeout(function(){
+            resolve('hello');
+          }, 2000)
+        })
+        .then(function(data){
+          console.log(data);
+          return new Promise(function(resolve, reject){
+            setTimeout(function(){
+              resolve('你好');
+            }, 2000)
+          })
+        })
+        .then(function(data){
+          console.log(data)
+        })
+      },
+      beforeMount: function() {
+        console.log('child beforeMount')
+      },
+      mounted: function() {
+        console.log('child mounted')
+      },
+    }
+    new Vue({
+      el: '#app-1',
+      components: {
+        'temp-a': obj
+      },
+      data: {
+        message: 'parent',
+        isAcitve: false,
+        inputText: 'lilong',
+        isDisabled: false
+      },
+      // render: function(h) {
+      //   return h(obj);
+      // },
+      beforeMount: function() {
+        console.log('parent beforeMount')
+      },
+      mounted: function() {
+        console.log('parent mounted')
+      },
+      beforeCreate: function() {
+        console.log('parent beforeCreat');
+      },
+      created: function() {
+        console.log('parent created');
+      }
+    });
+    var obj2 = {
+      template: '<div>{{message}}'+
+        '</div>',
+      data: function() {
+        return {
+          message: 'hello Vue'
+        }
+      }
+    }
+    new Vue({
+      el: '#app-2',
+      render: function(h) {
+        return h(obj2);
+      }
+    });
+    function hello() {
+      console.log('hello');
+    }
+  </script>
+</body>
+</html>
